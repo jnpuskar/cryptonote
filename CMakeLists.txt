@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.6)
+cmake_minimum_required(VERSION 3.5)
 
 set(VERSION "0.1")
 # $Format:Packaged from commit %H%nset(COMMIT %h)%nset(REFS "%d")$
@@ -13,7 +13,7 @@ enable_testing()
 configure_file(${CMAKE_SOURCE_DIR}/CTestCustom.cmake ${CMAKE_BINARY_DIR})
 
 project(CryptoNote)
-
+set(CMAKE_CXX_STANDARD 14)
 include_directories(include src external "${CMAKE_BINARY_DIR}/version")
 if(APPLE)
   include_directories(SYSTEM /usr/include/malloc)
@@ -22,6 +22,8 @@ endif()
 
 if(MSVC)
 include_directories(src/Platform/Windows)
+include_directories(SYSTEM $ENV{BOOST_INCLUDEDIR})
+link_directories(SYSTEM $ENV{BOOST_LIBRARYDIR}) # must be before add_executable, add_library
 elseif(APPLE)
 include_directories(src/Platform/OSX)
 else()
@@ -29,6 +31,8 @@ include_directories(src/Platform/Linux)
 endif()
 
 set(STATIC ${MSVC} CACHE BOOL "Link libraries statically")
+add_definitions(-DBOOST_BIND_NO_PLACEHOLDERS=1 -DBOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE=1) # boost::_1 conflicts with std::_1
+
 
 if(MSVC)
   add_definitions("/bigobj /MP /W3 /GS- /D_CRT_SECURE_NO_WARNINGS /wd4996 /wd4345 /D_WIN32_WINNT=0x0600 /DWIN32_LEAN_AND_MEAN /DGTEST_HAS_TR1_TUPLE=0 /D_VARIADIC_MAX=8 /D__SSE4_1__")
@@ -109,7 +113,9 @@ if(STATIC)
   set(Boost_USE_STATIC_LIBS ON)
   set(Boost_USE_STATIC_RUNTIME ON)
 endif()
-find_package(Boost 1.55 REQUIRED COMPONENTS system filesystem thread date_time chrono regex serialization program_options)
+if(WIN32)
+else()
+find_package(Boost 1.66 REQUIRED COMPONENTS system filesystem thread date_time chrono regex serialization program_options)
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 if(MINGW)
   set(Boost_LIBRARIES "${Boost_LIBRARIES};ws2_32;mswsock")
@@ -117,6 +123,7 @@ elseif(APPLE)
   set(Boost_LIBRARIES "${Boost_LIBRARIES}")
 elseif(NOT MSVC)
   set(Boost_LIBRARIES "${Boost_LIBRARIES};rt")
+endif()
 endif()
 
 set(COMMIT_ID_IN_VERSION ON CACHE BOOL "Include commit ID in version")
