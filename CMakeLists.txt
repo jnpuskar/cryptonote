@@ -30,7 +30,12 @@ else()
 include_directories(src/Platform/Linux)
 endif()
 
+if(MSVC)
 set(STATIC ${MSVC} CACHE BOOL "Link libraries statically")
+else()
+set(STATIC "Link boost libraries statically")
+endif()
+
 add_definitions(-DBOOST_BIND_NO_PLACEHOLDERS=1 -DBOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE=1) # boost::_1 conflicts with std::_1
 
 
