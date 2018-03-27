@@ -188,7 +188,9 @@ void WalletLegacy::initSync() {
   sub.transactionSpendableAge = 1;
   sub.syncStart.height = 0;
   sub.syncStart.timestamp = m_account.get_createtime() - ACCOUN_CREATE_TIME_ACCURACY;
-  
+  if (m_syncAll == 1)
+	sub.syncStart.timestamp = 0;
+  std::cout << "Sync from timestamp: " << sub.syncStart.timestamp << std::endl;
   auto& subObject = m_transfersSync.addSubscription(sub);
   m_transferDetails = &subObject.getContainer();
   subObject.addObserver(this);
@@ -578,6 +580,10 @@ void WalletLegacy::notifyIfBalanceChanged() {
     m_observerManager.notify(&IWalletLegacyObserver::pendingBalanceUpdated, pending);
   }
 
+}
+
+void WalletLegacy::syncAll(bool syncWalletFromZero) {
+  m_syncAll = syncWalletFromZero;
 }
 
 void WalletLegacy::getAccountKeys(AccountKeys& keys) {

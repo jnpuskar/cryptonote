@@ -447,10 +447,17 @@ BlockchainSynchronizer::UpdateConsumersResult BlockchainSynchronizer::updateCons
       kv.first->onBlockchainDetach(result.detachHeight);
       kv.second->detach(result.detachHeight);
     }
+	
+	if (result.newBlockHeight == 1)
+		result.newBlockHeight = 0;
 
     if (result.hasNewBlocks) {
       uint32_t startOffset = result.newBlockHeight - interval.startHeight;
-      // update consumer
+	  
+	  if (result.newBlockHeight == 0)
+		  startOffset = 0;
+
+	  // update consumer
       if (kv.first->onNewBlocks(blocks.data() + startOffset, result.newBlockHeight, static_cast<uint32_t>(blocks.size()) - startOffset)) {
         // update state if consumer succeeded
         kv.second->addBlocks(interval.blocks.data() + startOffset, result.newBlockHeight, static_cast<uint32_t>(interval.blocks.size()) - startOffset);
