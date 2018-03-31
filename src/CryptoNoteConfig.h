@@ -77,7 +77,9 @@ const char     MINER_CONFIG_FILE_NAME[]                      = "miner_conf.json"
 
 // Currency name and our genesis transaction
 const char     CRYPTONOTE_NAME[]                             = "dcrown";
-const char	   GENESIS_COINBASE_TX_HEX[]					 = "013c01ff0001ffffffffffff0f029b2e4c0281c0b02e7c53291a94d1d0cbff8883f8024f5142ee494ffbbd08807121011c582cb528dbd889b16cb9a2ce561b6b4ca5f51c013ddb4c1dbebc3f576e0806";
+// This genesis block should have premine of 0.06 of total currency to address
+// dcrwZttFJPYXMb6wxVzjHmBLEpoWNc8v6RQrCR8xUrZzRGE7UM4R7328kj72j3bMCAbDeTLmNA5NPBNaScSWpXq46YrCYGvfGX
+const char GENESIS_COINBASE_TX_HEX[] = "011e01ff0001ffffffffff3f029b2e4c0281c0b02e7c53291a94d1d0cbff8883f8024f5142ee494ffbbd0880712101ebb6cb520eaafb15a50168186d74eb0fbaee65ad46319f7c8c31a502612946d6";
 
 const uint8_t  CURRENT_TRANSACTION_VERSION                   =  1;
 const uint8_t  BLOCK_MAJOR_VERSION_1                         =  1;
