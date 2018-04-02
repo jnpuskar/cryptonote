@@ -29,7 +29,7 @@ const unsigned EMISSION_SPEED_FACTOR                         = 23;
 static_assert(EMISSION_SPEED_FACTOR <= 8 * sizeof(uint64_t), "Bad EMISSION_SPEED_FACTOR");
 
 // Premine amount is defined as 6% of the coin supply
-const uint64_t GENESIS_BLOCK_REWARD							 = MONEY_SUPPLY * ((uint64_t)0.06);
+const uint64_t GENESIS_BLOCK_REWARD							 = ((uint64_t)(MONEY_SUPPLY >> 10));
 
 //TODO Define number of blocks for block size median calculation
 const size_t   CRYPTONOTE_REWARD_BLOCKS_WINDOW               = 100;
@@ -79,7 +79,7 @@ const char     MINER_CONFIG_FILE_NAME[]                      = "miner_conf.json"
 const char     CRYPTONOTE_NAME[]                             = "dcrown";
 // This genesis block should have premine of 0.06 of total currency to address
 // dcrwZttFJPYXMb6wxVzjHmBLEpoWNc8v6RQrCR8xUrZzRGE7UM4R7328kj72j3bMCAbDeTLmNA5NPBNaScSWpXq46YrCYGvfGX
-const char GENESIS_COINBASE_TX_HEX[] = "011e01ff0001ffffffffff3f029b2e4c0281c0b02e7c53291a94d1d0cbff8883f8024f5142ee494ffbbd0880712101ebb6cb520eaafb15a50168186d74eb0fbaee65ad46319f7c8c31a502612946d6";
+const char GENESIS_COINBASE_TX_HEX[] = "";
 
 const uint8_t  CURRENT_TRANSACTION_VERSION                   =  1;
 const uint8_t  BLOCK_MAJOR_VERSION_1                         =  1;

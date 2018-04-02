@@ -58,7 +58,10 @@ void print_genesis_tx_hex(const po::variables_map& vm, LoggerManager& logManager
 	std::vector<CryptoNote::AccountPublicAddress> targets;
 	auto genesis_block_reward_addresses = command_line::get_arg(vm, arg_genesis_block_reward_address);
 	CryptoNote::CurrencyBuilder currencyBuilder(logManager);
-	CryptoNote::Currency currency = currencyBuilder.currency();
+	// The below line throws as it tries to use genesis tx. 
+	// Do address parsing indep or use unintialized curency == do not call currency::init
+	TODO
+	CryptoNote::Currency currency = currencyBuilder.currency(); 
 	for (const auto& address_string : genesis_block_reward_addresses)
 	{
 		CryptoNote::AccountPublicAddress address;
@@ -128,6 +131,10 @@ JsonValue buildLoggerConfiguration(Level level, const std::string& logfile) {
 
 int main(int argc, char* argv[])
 {
+	std::cout << "DEBUG Press key:";
+	std::string answer;
+	std::getline(std::cin, answer);
+
 
 #ifdef WIN32
   _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
@@ -176,7 +183,7 @@ int main(int argc, char* argv[])
       }
 
       if (command_line::get_arg(vm, arg_print_genesis_tx)) {
-        print_genesis_tx_hex();
+		print_genesis_tx_hex(vm, logManager);
         return false;
       }
 
