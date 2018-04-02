@@ -134,10 +134,6 @@ JsonValue buildLoggerConfiguration(Level level, const std::string& logfile) {
 
 int main(int argc, char* argv[])
 {
-	std::cout << "DEBUG Press key:";
-	std::string answer;
-	std::getline(std::cin, answer);
-
 
 #ifdef WIN32
   _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
