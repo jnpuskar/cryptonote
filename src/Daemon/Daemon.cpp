@@ -58,19 +58,23 @@ void print_genesis_tx_hex(const po::variables_map& vm, LoggerManager& logManager
 	std::vector<CryptoNote::AccountPublicAddress> targets;
 	auto genesis_block_reward_addresses = command_line::get_arg(vm, arg_genesis_block_reward_address);
 	CryptoNote::CurrencyBuilder currencyBuilder(logManager);
-	// The below line throws as it tries to use genesis tx. 
-	// Do address parsing indep or use unintialized curency == do not call currency::init
-	TODO
-	CryptoNote::Currency currency = currencyBuilder.currency(); 
 	for (const auto& address_string : genesis_block_reward_addresses)
 	{
 		CryptoNote::AccountPublicAddress address;
-		if (!currency.parseAccountAddressString(address_string, address)) {
+
+		uint64_t prefix;
+		if (!CryptoNote::parseAccountAddressString(prefix, address, address_string)) {
 			std::cout << "Failed to parse address: " << address_string << std::endl;
+			return;
+		}
+
+		if (prefix != parameters::CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX) {
+			std::cout << "Wrong address prefix: " << prefix << ", expected " << parameters::CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX;
 			return;
 		}
 		targets.emplace_back(std::move(address));
 	}
+
 	if (targets.empty())
 	{
 		if (CryptoNote::parameters::GENESIS_BLOCK_REWARD > 0)
@@ -84,7 +88,6 @@ void print_genesis_tx_hex(const po::variables_map& vm, LoggerManager& logManager
 			std::string tx_hex = Common::toHex(txb);
 			std::cout << "Insert this line into your coin configuration file as is: " << std::endl;
 			std::cout << "const char GENESIS_COINBASE_TX_HEX[] = " << tx_hex << "\";" << std::endl;
-
 		}
 	}
 	else
